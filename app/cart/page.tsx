@@ -157,9 +157,11 @@ export default function CartPage() {
                       <span className="text-foreground">${total.toFixed(2)}</span>
                     </div>
                   </div>
-                  <Button className="mt-6 w-full" size="lg">
-                    Proceed to Checkout
-                  </Button>
+                  <Link href="/checkout">
+                    <Button className="mt-6 w-full" size="lg">
+                      Proceed to Checkout
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
