@@ -101,9 +101,9 @@ export const products: Product[] = [
 ]
 
 export const categories = [
-  { name: 'Electronics', href: '#', image: '/images/category-electronics.png' },
-  { name: 'Fashion', href: '#', image: '/images/category-fashion.png' },
-  { name: 'Home', href: '#', image: '/images/category-home.png' },
-  { name: 'Beauty', href: '#', image: '/images/category-beauty.png' },
-  { name: 'Sports', href: '#', image: '/images/category-sports.png' },
+  { name: 'Electronics', href: '/products?category=Electronics', image: '/images/category-electronics.png' },
+  { name: 'Fashion', href: '/products?category=Fashion', image: '/images/category-fashion.png' },
+  { name: 'Home', href: '/products?category=Home', image: '/images/category-home.png' },
+  { name: 'Beauty', href: '/products?category=Beauty', image: '/images/category-beauty.png' },
+  { name: 'Sports', href: '/products?category=Sports', image: '/images/category-sports.png' },
 ]

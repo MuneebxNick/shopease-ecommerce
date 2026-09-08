@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { Menu, Search, ShoppingBag, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/sheet'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const navLinks = [
+const landingNavLinks = [
   { label: 'Shop', href: '/products' },
   { label: 'New Arrivals', href: '#new-arrivals' },
   { label: 'Categories', href: '#categories' },
@@ -22,7 +23,19 @@ const navLinks = [
   { label: 'About', href: '#about' },
 ]
 
+const shopNavLinks = [
+  { label: 'Home', href: '/' },
+  { label: 'Shop', href: '/products' },
+  { label: 'Categories', href: '/products' },
+  { label: 'Deals', href: '/products' },
+  { label: 'New Arrivals', href: '/products' },
+]
+
 export function SiteHeader() {
+  const pathname = usePathname()
+  const isLandingPage = pathname === '/'
+  const activeNavLinks = isLandingPage ? landingNavLinks : shopNavLinks
+
   const [cartCount] = useState(3)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -70,9 +83,9 @@ export function SiteHeader() {
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-4">
-                {navLinks.map((link, i) => (
+                {activeNavLinks.map((link, i) => (
                   <motion.div
-                    key={link.href}
+                    key={link.label}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
@@ -102,9 +115,9 @@ export function SiteHeader() {
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-7 lg:flex">
-            {navLinks.map((link) => (
+            {activeNavLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 className="group relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
