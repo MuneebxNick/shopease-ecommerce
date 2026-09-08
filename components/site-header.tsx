@@ -167,26 +167,28 @@ export function SiteHeader() {
             <User className="size-5" />
           </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={`Cart, ${cartCount} items`}
-            className="group relative"
-          >
-            <motion.div whileTap={{ scale: 0.9 }}>
-              <ShoppingBag className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
-            </motion.div>
-            {isMounted && cartCount > 0 && (
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                className="absolute right-0.5 top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground"
-              >
-                {cartCount}
-              </motion.span>
-            )}
-          </Button>
+          <Link href="/cart">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={`Cart, ${cartCount} items`}
+              className="group relative"
+            >
+              <motion.div whileTap={{ scale: 0.9 }}>
+                <ShoppingBag className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
+              </motion.div>
+              {isMounted && cartCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                  className="absolute right-0.5 top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground"
+                >
+                  {cartCount}
+                </motion.span>
+              )}
+            </Button>
+          </Link>
         </div>
       </div>
     </motion.header>
