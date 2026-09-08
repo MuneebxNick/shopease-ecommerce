@@ -23,7 +23,7 @@ export function HeroSection() {
             <Button
               size="lg"
               nativeButton={false}
-              render={<Link href="#new-arrivals" />}
+              render={<Link href="/products" />}
             >
               Shop New Arrivals
               <ArrowRight data-icon="inline-end" />
