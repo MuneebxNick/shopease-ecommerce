@@ -55,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`bg-background ${geistSans.variable} ${fraunces.variable}`}
+      className={`scroll-smooth scroll-pt-20 bg-background ${geistSans.variable} ${fraunces.variable}`}
     >
       <body className="font-sans antialiased">
         {children}

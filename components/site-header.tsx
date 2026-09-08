@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Menu, Search, ShoppingBag, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,6 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const navLinks = [
   { label: 'New Arrivals', href: '#new-arrivals' },
@@ -22,11 +23,32 @@ const navLinks = [
 
 export function SiteHeader() {
   const [cartCount] = useState(3)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+
+  // Handle scroll effect for dynamic header styling
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      className={`sticky top-0 z-40 w-full border-b transition-colors duration-300 ${
+        isScrolled
+          ? 'border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80'
+          : 'border-transparent bg-background'
+      }`}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
+          {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger
               render={
@@ -38,78 +60,116 @@ export function SiteHeader() {
                 />
               }
             >
-              <Menu />
+              <Menu className="size-5" />
             </SheetTrigger>
-            <SheetContent side="left">
+            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <SheetHeader>
-                <SheetTitle className="font-serif text-xl italic">
-                  Aro
+                <SheetTitle className="text-left font-serif text-2xl font-bold tracking-tight text-foreground">
+                  ShopEase
                 </SheetTitle>
               </SheetHeader>
-              <nav className="flex flex-col gap-1 px-4">
-                {navLinks.map((link) => (
-                  <Link
+              <nav className="mt-8 flex flex-col gap-4">
+                {navLinks.map((link, i) => (
+                  <motion.div
                     key={link.href}
-                    href={link.href}
-                    className="rounded-md px-2 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
                   >
-                    {link.label}
-                  </Link>
+                    <Link
+                      href={link.href}
+                      className="block text-lg font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
                 ))}
               </nav>
             </SheetContent>
           </Sheet>
 
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-serif text-2xl italic tracking-tight text-foreground">
-              Aro
-            </span>
+            <motion.span
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="font-serif text-2xl font-bold tracking-tight text-foreground"
+            >
+              ShopEase
+            </motion.span>
           </Link>
 
+          {/* Desktop Navigation */}
           <nav className="hidden items-center gap-7 lg:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="group relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {link.label}
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-foreground transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="relative hidden sm:block">
-            <Search
-              className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground"
-              aria-hidden="true"
-            />
-            <Input
-              type="search"
-              placeholder="Search products"
-              aria-label="Search products"
-              className="w-48 pl-8 lg:w-64"
-            />
+        {/* Action Icons */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="relative flex items-center">
+            <AnimatePresence>
+              {isSearchOpen && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 'auto', opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  className="mr-2 hidden overflow-hidden sm:block"
+                >
+                  <Input
+                    type="search"
+                    placeholder="Search products..."
+                    className="w-48 lg:w-64"
+                    autoFocus
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Search"
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+            >
+              <Search className="size-5" />
+            </Button>
           </div>
+
           <Button variant="ghost" size="icon" aria-label="Account">
-            <User />
+            <User className="size-5" />
           </Button>
+
           <Button
             variant="ghost"
             size="icon"
             aria-label={`Cart, ${cartCount} items`}
-            className="relative"
+            className="group relative"
           >
-            <ShoppingBag />
+            <motion.div whileTap={{ scale: 0.9 }}>
+              <ShoppingBag className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
+            </motion.div>
             {cartCount > 0 && (
-              <span className="absolute right-0.5 top-0.5 flex size-4 items-center justify-center rounded-full bg-accent text-[10px] font-semibold text-accent-foreground">
+              <motion.span
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                className="absolute right-0.5 top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground"
+              >
                 {cartCount}
-              </span>
+              </motion.span>
             )}
           </Button>
         </div>
       </div>
-    </header>
+    </motion.header>
   )
 }
