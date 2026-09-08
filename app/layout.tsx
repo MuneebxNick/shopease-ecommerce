@@ -16,9 +16,9 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
-  title: 'Aro — Everyday goods, elevated',
+  title: 'ShopEase — Everyday goods, elevated',
   description:
-    'Aro is a curated marketplace for premium essentials — electronics, fashion, home, beauty, and more, delivered with care.',
+    'ShopEase is a curated marketplace for premium essentials — electronics, fashion, home, beauty, and more, delivered with care.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -47,6 +47,8 @@ export const viewport: Viewport = {
   ],
 }
 
+import { TopLoader } from '@/components/top-loader'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -58,6 +60,7 @@ export default function RootLayout({
       className={`scroll-smooth scroll-pt-20 bg-background ${geistSans.variable} ${fraunces.variable}`}
     >
       <body className="font-sans antialiased">
+        <TopLoader />
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

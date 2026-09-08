@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { products } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
 import { Button } from '@/components/ui/button'
@@ -15,9 +16,11 @@ export function FeaturedProductsSection() {
               Fresh in, ready to ship.
             </p>
           </div>
-          <Button variant="outline" size="sm" className="hidden sm:inline-flex">
-            View all
-          </Button>
+          <Link href="/products" className="hidden sm:inline-flex">
+            <Button variant="outline" size="sm" className="w-full">
+              View all
+            </Button>
+          </Link>
         </div>
         <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
           {products.map((product) => (

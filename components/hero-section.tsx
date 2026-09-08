@@ -15,7 +15,7 @@ export function HeroSection() {
             Everyday goods, elevated.
           </h1>
           <p className="max-w-md text-pretty text-base leading-relaxed text-muted-foreground">
-            Aro curates the essentials worth owning — thoughtfully made
+            ShopEase curates the essentials worth owning — thoughtfully made
             electronics, apparel, and home goods, chosen for how they hold up
             over time.
           </p>

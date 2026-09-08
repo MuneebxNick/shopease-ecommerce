@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useCartStore } from '@/store/cart-store'
+import { formatPrice } from '@/lib/utils/currency'
 import { Separator } from '@/components/ui/separator'
 
 export function CheckoutSummary() {
@@ -28,7 +29,7 @@ export function CheckoutSummary() {
               <span className="text-sm text-muted-foreground">Qty: {item.quantity}</span>
             </div>
             <span className="font-medium text-foreground">
-              ${(item.price * item.quantity).toFixed(2)}
+              {formatPrice(item.price * item.quantity)}
             </span>
           </div>
         ))}
@@ -37,7 +38,7 @@ export function CheckoutSummary() {
       <div className="space-y-4 text-sm">
         <div className="flex justify-between">
           <span className="text-muted-foreground">Subtotal</span>
-          <span className="font-medium text-foreground">${total.toFixed(2)}</span>
+          <span className="font-medium text-foreground">{formatPrice(total)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-muted-foreground">Shipping</span>
@@ -46,7 +47,7 @@ export function CheckoutSummary() {
         <Separator />
         <div className="flex justify-between text-base font-semibold">
           <span className="text-foreground">Total</span>
-          <span className="text-foreground">${total.toFixed(2)}</span>
+          <span className="text-foreground">{formatPrice(total)}</span>
         </div>
       </div>
     </div>

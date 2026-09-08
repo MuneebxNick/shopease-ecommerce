@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Star } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { formatPrice } from '@/lib/utils/currency'
 import type { Product } from '@/lib/products'
+import { AddToCartButton } from '@/components/products/add-to-cart-button'
 
 export function ProductCard({ product }: { product: Product }) {
   const discount = product.originalPrice
@@ -14,7 +15,7 @@ export function ProductCard({ product }: { product: Product }) {
     : null
 
   return (
-    <div className="group flex flex-col gap-3">
+    <div className="group flex h-full flex-col gap-3">
       <Link href={`/products/${product.slug}`} className="relative aspect-square w-full overflow-hidden rounded-xl bg-muted block">
         <Image
           src={product.image || '/placeholder.svg'}
@@ -29,7 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </Link>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-1 flex-col gap-1">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           {product.category}
         </p>
@@ -42,22 +43,21 @@ export function ProductCard({ product }: { product: Product }) {
             {product.rating} ({product.reviewCount})
           </span>
         </div>
-      </div>
-
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-baseline gap-2">
+        
+        <div className="mt-1 flex items-baseline gap-2">
           <span className="text-base font-semibold text-foreground">
-            ${product.price}
+            {formatPrice(product.price)}
           </span>
           {product.originalPrice && (
             <span className="text-sm text-muted-foreground line-through">
-              ${product.originalPrice}
+              {formatPrice(product.originalPrice)}
             </span>
           )}
         </div>
-        <Button size="sm" variant="outline">
-          Add to cart
-        </Button>
+      </div>
+
+      <div className="mt-auto pt-2">
+        <AddToCartButton product={product} />
       </div>
     </div>
   )

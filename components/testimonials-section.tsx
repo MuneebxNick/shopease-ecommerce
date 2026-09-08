@@ -3,23 +3,23 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 const testimonials = [
   {
-    name: 'Priya Nair',
+    name: 'Zara Ahmed',
     role: 'Verified buyer',
-    initials: 'PN',
+    initials: 'ZA',
     quote:
       'The Aurora headphones are worth every penny. Packaging alone felt premium, and the sound quality has kept me from reaching for my old pair since.',
   },
   {
-    name: 'Marcus Webb',
+    name: 'Ali Hassan',
     role: 'Verified buyer',
-    initials: 'MW',
+    initials: 'AH',
     quote:
-      'Ordered the Wayfare backpack for a work trip and it has held up beautifully through three flights. Aro is now my default for anything I plan to keep.',
+      'Ordered the Wayfare backpack for a work trip and it has held up beautifully through three flights. ShopEase is now my default for anything I plan to keep.',
   },
   {
-    name: 'Elena Cruz',
+    name: 'Fatima Khan',
     role: 'Verified buyer',
-    initials: 'EC',
+    initials: 'FK',
     quote:
       'Fast shipping, honest product photos, and a return process that took two minutes. Rare to find all three in one place.',
   },

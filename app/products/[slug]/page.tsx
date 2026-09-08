@@ -7,6 +7,8 @@ import { AddToCartButton } from '@/components/products/add-to-cart-button'
 import { getProductBySlug } from '@/lib/api/products'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { formatPrice } from '@/lib/utils/currency'
+import { ProductInfoAnimator } from '@/components/products/product-info-animator'
 
 export async function generateMetadata({
   params,
@@ -55,7 +57,7 @@ export default async function ProductDetailPage({
             </div>
 
             {/* Right: Details */}
-            <div className="flex flex-col">
+            <ProductInfoAnimator>
               <div className="mb-3 flex items-center gap-2">
                 <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   {product.category}
@@ -84,11 +86,11 @@ export default async function ProductDetailPage({
 
               <div className="mb-8 flex items-baseline gap-3">
                 <span className="text-3xl font-semibold text-foreground">
-                  ${product.price}
+                  {formatPrice(product.price)}
                 </span>
                 {product.originalPrice && (
                   <span className="text-lg text-muted-foreground line-through">
-                    ${product.originalPrice}
+                    {formatPrice(product.originalPrice)}
                   </span>
                 )}
               </div>
@@ -111,7 +113,7 @@ export default async function ProductDetailPage({
               <div className="mt-auto">
                 <AddToCartButton product={product} />
               </div>
-            </div>
+            </ProductInfoAnimator>
             
           </div>
         </div>

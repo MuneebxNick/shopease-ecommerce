@@ -9,10 +9,12 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { CheckoutForm } from '@/components/checkout/checkout-form'
 import { CheckoutSummary } from '@/components/checkout/checkout-summary'
+import { OrderSuccess } from '@/components/checkout/order-success'
 
 export default function CheckoutPage() {
   const { items } = useCartStore()
   const [isMounted, setIsMounted] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
@@ -23,6 +25,20 @@ export default function CheckoutPage() {
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
         <main className="flex-1 bg-background" />
+        <SiteFooter />
+      </div>
+    )
+  }
+
+  if (isSuccess) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <SiteHeader />
+        <main className="flex-1 bg-background pb-16 pt-8 md:pb-24 md:pt-12 flex items-center justify-center">
+          <div className="w-full max-w-2xl px-4">
+            <OrderSuccess />
+          </div>
+        </main>
         <SiteFooter />
       </div>
     )
@@ -59,7 +75,7 @@ export default function CheckoutPage() {
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
               {/* Checkout Form */}
               <div className="order-2 lg:order-1 lg:col-span-7">
-                <CheckoutForm />
+                <CheckoutForm onSuccess={() => setIsSuccess(true)} />
               </div>
 
               {/* Order Summary */}

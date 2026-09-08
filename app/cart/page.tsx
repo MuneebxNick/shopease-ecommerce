@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ShoppingBag, Minus, Plus, Trash2, ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { formatPrice } from '@/lib/utils/currency'
 import { useCartStore } from '@/store/cart-store'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -87,11 +88,11 @@ export default function CartPage() {
                               {item.name}
                             </h3>
                             <span className="font-semibold text-foreground sm:text-lg">
-                              ${(item.price * item.quantity).toFixed(2)}
+                              {formatPrice(item.price * item.quantity)}
                             </span>
                           </div>
                           <div className="text-sm text-muted-foreground">
-                            ${item.price.toFixed(2)} each
+                            {formatPrice(item.price)} each
                           </div>
                           
                           <div className="mt-4 flex items-center justify-between sm:mt-auto">
@@ -145,7 +146,7 @@ export default function CartPage() {
                   <div className="space-y-4 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Subtotal</span>
-                      <span className="font-medium text-foreground">${total.toFixed(2)}</span>
+                      <span className="font-medium text-foreground">{formatPrice(total)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Shipping</span>
@@ -154,7 +155,7 @@ export default function CartPage() {
                     <Separator />
                     <div className="flex justify-between text-base font-semibold">
                       <span className="text-foreground">Total</span>
-                      <span className="text-foreground">${total.toFixed(2)}</span>
+                      <span className="text-foreground">{formatPrice(total)}</span>
                     </div>
                   </div>
                   <Link href="/checkout">

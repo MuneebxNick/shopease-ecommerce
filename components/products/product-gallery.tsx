@@ -2,13 +2,19 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 export function ProductGallery({ images, name }: { images: string[], name: string }) {
   const [activeImage, setActiveImage] = useState(0)
 
   return (
-    <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-6">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col-reverse gap-4 md:flex-row md:gap-6"
+    >
       {images.length > 1 && (
         <div className="flex gap-4 overflow-x-auto pb-2 md:flex-col md:pb-0 [&::-webkit-scrollbar]:hidden">
           {images.map((img, index) => (
@@ -42,6 +48,6 @@ export function ProductGallery({ images, name }: { images: string[], name: strin
           crossOrigin="anonymous"
         />
       </div>
-    </div>
+    </motion.div>
   )
 }

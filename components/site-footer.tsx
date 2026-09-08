@@ -12,7 +12,7 @@ const footerColumns = [
   },
   {
     title: 'Company',
-    links: ['About Aro', 'Careers', 'Press', 'Sustainability'],
+    links: ['About ShopEase', 'Careers', 'Press', 'Sustainability'],
   },
 ]
 
@@ -23,7 +23,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           <div className="col-span-2 flex flex-col gap-3 sm:col-span-1">
             <span className="font-serif text-2xl italic text-foreground">
-              Aro
+              ShopEase
             </span>
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
               Curated essentials for everyday life, chosen for quality that
@@ -70,7 +70,7 @@ export function SiteFooter() {
 
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Aro. All rights reserved.
+            © {new Date().getFullYear()} ShopEase. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
             <Link
