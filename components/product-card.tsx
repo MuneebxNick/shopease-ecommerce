@@ -37,7 +37,7 @@ export function ProductCard({ product }: { product: Product }) {
           <h3 className="text-sm font-medium text-foreground">{product.name}</h3>
         </Link>
         <div className="flex items-center gap-1">
-          <Star className="size-3.5 fill-accent text-accent" aria-hidden="true" />
+          <Star className="size-3.5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
           <span className="text-xs text-muted-foreground">
             {product.rating} ({product.reviewCount})
           </span>

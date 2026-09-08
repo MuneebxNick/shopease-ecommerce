@@ -73,7 +73,7 @@ export default async function ProductDetailPage({
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`size-4 ${i < Math.floor(product.rating) ? 'fill-accent text-accent' : 'fill-muted text-muted'}`}
+                      className={`size-4 ${i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200 dark:fill-gray-800 dark:text-gray-800'}`}
                     />
                   ))}
                 </div>
