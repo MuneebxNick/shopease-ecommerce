@@ -109,7 +109,7 @@ export default async function ProductDetailPage({
               </div>
 
               <div className="mt-auto">
-                <AddToCartButton productId={product.id} />
+                <AddToCartButton product={product} />
               </div>
             </div>
             

@@ -3,14 +3,22 @@
 import { useState } from 'react'
 import { ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Product } from '@/lib/data/products'
+import { useCartStore } from '@/store/cart-store'
 
-export function AddToCartButton({ productId }: { productId: string }) {
+export function AddToCartButton({ product }: { product: Product }) {
   const [isAdding, setIsAdding] = useState(false)
+  const addItem = useCartStore((state) => state.addItem)
 
   const handleAddToCart = () => {
     setIsAdding(true)
-    // TODO: Integrate Zustand cart store in future
-    console.log('Adding to cart:', productId)
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1
+    })
     setTimeout(() => setIsAdding(false), 500)
   }
 

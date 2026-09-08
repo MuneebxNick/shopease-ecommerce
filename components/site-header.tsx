@@ -14,6 +14,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useCartStore } from '@/store/cart-store'
 
 const landingNavLinks = [
   { label: 'Shop', href: '/products' },
@@ -36,12 +37,16 @@ export function SiteHeader() {
   const isLandingPage = pathname === '/'
   const activeNavLinks = isLandingPage ? landingNavLinks : shopNavLinks
 
-  const [cartCount] = useState(3)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  const items = useCartStore((state) => state.items)
+  const cartCount = items.reduce((total, item) => total + item.quantity, 0)
 
   // Handle scroll effect for dynamic header styling
   useEffect(() => {
+    setIsMounted(true)
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
     }
@@ -171,7 +176,7 @@ export function SiteHeader() {
             <motion.div whileTap={{ scale: 0.9 }}>
               <ShoppingBag className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
             </motion.div>
-            {cartCount > 0 && (
+            {isMounted && cartCount > 0 && (
               <motion.span
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
