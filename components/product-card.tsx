@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -14,7 +15,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="group flex flex-col gap-3">
-      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-muted">
+      <Link href={`/products/${product.slug}`} className="relative aspect-square w-full overflow-hidden rounded-xl bg-muted block">
         <Image
           src={product.image || '/placeholder.svg'}
           alt={product.name}
@@ -26,13 +27,15 @@ export function ProductCard({ product }: { product: Product }) {
           {product.isNew && <Badge className="bg-foreground text-background">New</Badge>}
           {discount && <Badge variant="secondary">{`-${discount}%`}</Badge>}
         </div>
-      </div>
+      </Link>
 
       <div className="flex flex-col gap-1">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           {product.category}
         </p>
-        <h3 className="text-sm font-medium text-foreground">{product.name}</h3>
+        <Link href={`/products/${product.slug}`} className="hover:underline w-fit">
+          <h3 className="text-sm font-medium text-foreground">{product.name}</h3>
+        </Link>
         <div className="flex items-center gap-1">
           <Star className="size-3.5 fill-accent text-accent" aria-hidden="true" />
           <span className="text-xs text-muted-foreground">
