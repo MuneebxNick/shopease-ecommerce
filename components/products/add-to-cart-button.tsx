@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ShoppingBag, Check, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Product } from '@/lib/data/products'
+import type { Product } from '@/lib/products'
 import { useCartStore } from '@/store/cart-store'
 import { motion, AnimatePresence } from 'framer-motion'
 

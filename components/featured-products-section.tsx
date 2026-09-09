@@ -1,9 +1,10 @@
 import Link from 'next/link'
-import { products } from '@/lib/products'
+import { getProducts } from '@/lib/api/products'
 import { ProductCard } from '@/components/product-card'
 import { Button } from '@/components/ui/button'
 
-export function FeaturedProductsSection() {
+export async function FeaturedProductsSection() {
+  const products = await getProducts()
   return (
     <section id="new-arrivals" className="border-b border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
