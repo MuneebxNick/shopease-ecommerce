@@ -18,6 +18,7 @@ export interface ICustomer {
 }
 
 export interface IOrder extends Document {
+  userId?: string;
   orderNumber: string;
   paymentMethod: string;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
@@ -47,6 +48,7 @@ const CustomerSchema = new Schema<ICustomer>({
 
 const OrderSchema = new Schema<IOrder>(
   {
+    userId: { type: String, required: false },
     orderNumber: { type: String, required: true, unique: true },
     paymentMethod: { type: String, required: true, default: 'Cash on Delivery' },
     status: { 
@@ -63,6 +65,10 @@ const OrderSchema = new Schema<IOrder>(
   }
 );
 
+// During development, delete cached model to pick up schema changes after hot reload
+if (process.env.NODE_ENV !== 'production') {
+  delete mongoose.models.Order;
+}
 const Order: Model<IOrder> = mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);
 
 export default Order;

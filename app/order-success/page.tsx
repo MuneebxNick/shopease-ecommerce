@@ -55,7 +55,7 @@ export default async function OrderSuccessPage({
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
-              <Link href={`/orders/${order._id}`}>
+              <Link href={`/orders/${order._id.toString()}`}>
                 <Button variant="outline" size="lg">
                   View My Order
                 </Button>

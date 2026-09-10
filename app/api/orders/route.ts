@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
+import { verifyToken } from '@/lib/auth/jwt';
 
 function generateOrderNumber() {
   const date = new Date();
@@ -32,7 +34,13 @@ export async function POST(request: Request) {
     const totalAmount = mappedItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
     const orderNumber = generateOrderNumber();
 
+    // Read auth cookie directly in the route handler
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_token')?.value;
+    const tokenUser = token ? verifyToken(token) : null;
+
     const order = new Order({
+      userId: tokenUser?.userId || undefined,
       orderNumber,
       customer,
       items: mappedItems,

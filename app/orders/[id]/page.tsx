@@ -2,7 +2,9 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import dbConnect from '@/lib/db/mongodb'
 import Order from '@/models/Order'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
+import { getCurrentUser } from '@/lib/auth/get-current-user'
+import mongoose from 'mongoose'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
@@ -13,8 +15,18 @@ export default async function OrderDetailsPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params;
+  
+  const tokenUser = await getCurrentUser();
+  if (!tokenUser) {
+    redirect('/login');
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return notFound();
+  }
+
   await dbConnect()
-  const order = await Order.findById(id).lean()
+  const order = await Order.findOne({ _id: id, userId: tokenUser.userId }).lean()
 
   if (!order) {
     return notFound()
