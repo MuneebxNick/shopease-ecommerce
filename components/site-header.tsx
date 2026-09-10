@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Menu, Search, ShoppingBag, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -18,18 +18,18 @@ import { useCartStore } from '@/store/cart-store'
 
 const landingNavLinks = [
   { label: 'Shop', href: '/products' },
-  { label: 'New Arrivals', href: '#new-arrivals' },
   { label: 'Categories', href: '#categories' },
+  { label: 'New Arrivals', href: '#new-arrivals' },
   { label: 'Deals', href: '#deals' },
   { label: 'About', href: '#about' },
 ]
 
 const shopNavLinks = [
-  { label: 'Home', href: '/' },
   { label: 'Shop', href: '/products' },
   { label: 'Categories', href: '/products' },
-  { label: 'Deals', href: '/products' },
   { label: 'New Arrivals', href: '/products' },
+  { label: 'Deals', href: '/products' },
+  { label: 'About', href: '/#about' },
 ]
 
 export function SiteHeader() {
@@ -40,9 +40,29 @@ export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const items = useCartStore((state) => state.items)
   const cartCount = items.reduce((total, item) => total + item.quantity, 0)
+  const router = useRouter()
+
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null)
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) setUser(data.user)
+      })
+      .catch(() => setUser(null))
+  }, [])
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    setUser(null)
+    router.push('/')
+    router.refresh()
+  }
 
   // Handle scroll effect for dynamic header styling
   useEffect(() => {
@@ -163,9 +183,29 @@ export function SiteHeader() {
             </Button>
           </div>
 
-          <Button variant="ghost" size="icon" aria-label="Account">
-            <User className="size-5" />
-          </Button>
+          {user ? (
+            <div className="relative">
+              <Button variant="ghost" size="icon" aria-label="Account" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                <User className="size-5" />
+              </Button>
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 rounded-md border bg-card p-2 shadow-md">
+                  <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground border-b mb-1">
+                    Hi, {user.name}
+                  </div>
+                  <Link href="/account" className="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => setIsDropdownOpen(false)}>My Account</Link>
+                  <Link href="/orders" className="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => setIsDropdownOpen(false)}>My Orders</Link>
+                  <button onClick={() => { handleLogout(); setIsDropdownOpen(false); }} className="block w-full text-left rounded-sm px-2 py-1.5 text-sm text-red-500 hover:bg-accent">Logout</button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link href="/login">
+              <Button variant="ghost" size="icon" aria-label="Account">
+                <User className="size-5" />
+              </Button>
+            </Link>
+          )}
 
           <Link href="/cart">
             <Button
