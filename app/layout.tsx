@@ -29,6 +29,7 @@ export const viewport: Viewport = {
 }
 
 import { TopLoader } from '@/components/top-loader'
+import { Suspense } from 'react'
 
 export default function RootLayout({
   children,
@@ -41,7 +42,9 @@ export default function RootLayout({
       className={`scroll-smooth scroll-pt-20 bg-background ${inter.variable} ${playfair.variable}`}
     >
       <body className="font-sans antialiased">
-        <TopLoader />
+        <Suspense fallback={null}>
+          <TopLoader />
+        </Suspense>
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

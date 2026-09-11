@@ -3,6 +3,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { ProductList } from '@/components/products/product-list'
 import { ProductFilters } from '@/components/products/product-filters'
 import { getProducts } from '@/lib/api/products'
+import { Suspense } from 'react'
 
 export const metadata = {
   title: 'All Products — ShopEase',
@@ -47,7 +48,9 @@ export default async function ProductsPage({
           <div className="flex flex-col gap-10 md:flex-row md:gap-16">
             <aside className="w-full shrink-0 md:w-56 lg:w-64">
               <div className="sticky top-28">
-                <ProductFilters />
+                <Suspense fallback={<div>Loading filters...</div>}>
+                  <ProductFilters />
+                </Suspense>
               </div>
             </aside>
 
