@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -42,8 +44,7 @@ export default function LoginPage() {
         throw new Error(data.message || 'Invalid email or password');
       }
 
-      router.push('/account');
-      router.refresh();
+      window.location.href = callbackUrl || '/';
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -147,5 +148,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

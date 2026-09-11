@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Menu, Search, ShoppingBag, User } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -26,9 +27,9 @@ const landingNavLinks = [
 
 const shopNavLinks = [
   { label: 'Shop', href: '/products' },
-  { label: 'Categories', href: '/products' },
-  { label: 'New Arrivals', href: '/products' },
-  { label: 'Deals', href: '/products' },
+  { label: 'Categories', href: '/#categories' },
+  { label: 'New Arrivals', href: '/#new-arrivals' },
+  { label: 'Deals', href: '/#deals' },
   { label: 'About', href: '/#about' },
 ]
 
@@ -41,6 +42,7 @@ export function SiteHeader() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [activeHash, setActiveHash] = useState('')
 
   const items = useCartStore((state) => state.items)
   const cartCount = items.reduce((total, item) => total + item.quantity, 0)
@@ -64,15 +66,77 @@ export function SiteHeader() {
     router.refresh()
   }
 
-  // Handle scroll effect for dynamic header styling
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false)
+      }
+    }
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isDropdownOpen])
+
+  // Handle scroll effect and scroll spy
   useEffect(() => {
     setIsMounted(true)
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
     }
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    
+    // Set initial hash
+    setActiveHash(window.location.hash)
+    
+    const handleHashChange = () => setActiveHash(window.location.hash)
+    window.addEventListener('hashchange', handleHashChange)
+    
+    // Scroll spy for sections
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveHash(`#${entry.target.id}`)
+          }
+        })
+      },
+      { rootMargin: '-20% 0px -60% 0px' }
+    )
+    
+    document.querySelectorAll('section[id], div[id]').forEach((el) => {
+      if (['categories', 'new-arrivals', 'deals', 'about'].includes(el.id)) {
+        observer.observe(el)
+      }
+    })
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('hashchange', handleHashChange)
+      observer.disconnect()
+    }
   }, [])
+
+  const checkIsActive = (href: string) => {
+    if (href === '/') {
+      return pathname === '/' && !activeHash
+    }
+    if (href.startsWith('#')) {
+      return isLandingPage && activeHash === href
+    }
+    if (href.includes('#')) {
+      const [path, hash] = href.split('#')
+      return pathname === path && activeHash === `#${hash}`
+    }
+    
+    // Exact match for /products so it doesn't stay active on every other page unexpectedly
+    if (href === '/products' && pathname === '/products') return true
+    
+    return pathname.startsWith(`${href}/`)
+  }
 
   return (
     <motion.header
@@ -117,7 +181,16 @@ export function SiteHeader() {
                   >
                     <Link
                       href={link.href}
-                      className="block text-lg font-medium text-muted-foreground transition-colors hover:text-foreground"
+                      onClick={() => {
+                        if (link.href.includes('#')) {
+                          const hash = link.href.substring(link.href.indexOf('#'))
+                          setActiveHash(hash)
+                        }
+                      }}
+                      className={cn(
+                        "block text-lg font-medium transition-colors hover:text-foreground",
+                        checkIsActive(link.href) ? "text-foreground font-bold" : "text-muted-foreground"
+                      )}
                     >
                       {link.label}
                     </Link>
@@ -144,10 +217,22 @@ export function SiteHeader() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="group relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                onClick={() => {
+                  if (link.href.includes('#')) {
+                    const hash = link.href.substring(link.href.indexOf('#'))
+                    setActiveHash(hash)
+                  }
+                }}
+                className={cn(
+                  "group relative text-sm font-medium transition-colors hover:text-foreground",
+                  checkIsActive(link.href) ? "text-foreground" : "text-muted-foreground"
+                )}
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-foreground transition-all duration-300 group-hover:w-full" />
+                <span className={cn(
+                  "absolute -bottom-1 left-0 h-0.5 bg-foreground transition-all duration-300",
+                  checkIsActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
+                )} />
               </Link>
             ))}
           </nav>
@@ -184,17 +269,18 @@ export function SiteHeader() {
           </div>
 
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <Button variant="ghost" size="icon" aria-label="Account" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                 <User className="size-5" />
               </Button>
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 rounded-md border bg-card p-2 shadow-md">
                   <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground border-b mb-1">
-                    Hi, {user.name}
+                    Hi, {user.name} 👋
                   </div>
                   <Link href="/account" className="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => setIsDropdownOpen(false)}>My Account</Link>
                   <Link href="/orders" className="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => setIsDropdownOpen(false)}>My Orders</Link>
+                  <Link href="/wishlist" className="block rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground" onClick={() => setIsDropdownOpen(false)}>Wishlist</Link>
                   <button onClick={() => { handleLogout(); setIsDropdownOpen(false); }} className="block w-full text-left rounded-sm px-2 py-1.5 text-sm text-red-500 hover:bg-accent">Logout</button>
                 </div>
               )}

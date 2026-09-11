@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { formatPrice } from '@/lib/utils/currency'
 import type { Product } from '@/lib/products'
 import { AddToCartButton } from '@/components/products/add-to-cart-button'
+import { WishlistButton } from '@/components/products/wishlist-button'
 
 export function ProductCard({ product }: { product: Product }) {
   const discount = product.originalPrice
@@ -27,6 +28,9 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="absolute left-3 top-3 flex flex-col gap-1.5">
           {product.isNew && <Badge className="bg-foreground text-background">New</Badge>}
           {discount && <Badge variant="secondary">{`-${discount}%`}</Badge>}
+        </div>
+        <div className="absolute right-3 top-3 opacity-0 transition-opacity group-hover:opacity-100">
+          <WishlistButton productId={product.id} />
         </div>
       </Link>
 

@@ -37,8 +37,8 @@ export default async function OrdersPage() {
               View and track your recent purchases.
             </p>
           </div>
-          <Link href="/account">
-            <Button variant="outline">Back to Account</Button>
+          <Link href="/">
+            <Button variant="outline">Continue Shopping</Button>
           </Link>
         </div>
 

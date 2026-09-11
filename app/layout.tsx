@@ -1,42 +1,23 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Geist } from 'next/font/google'
-import { Fraunces } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 
-const geistSans = Geist({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-geist-sans',
+  variable: '--font-inter',
 })
 
-const fraunces = Fraunces({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  variable: '--font-fraunces',
+  variable: '--font-playfair',
   style: ['normal', 'italic'],
 })
 
 export const metadata: Metadata = {
-  title: 'ShopEase — Everyday goods, elevated',
-  description:
-    'ShopEase is a curated marketplace for premium essentials — electronics, fashion, home, beauty, and more, delivered with care.',
+  title: 'ShopEase — Everyday goods, elevated.',
+  description: 'Premium curated products for modern lifestyles.',
   generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
 }
 
 export const viewport: Viewport = {
@@ -57,7 +38,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`scroll-smooth scroll-pt-20 bg-background ${geistSans.variable} ${fraunces.variable}`}
+      className={`scroll-smooth scroll-pt-20 bg-background ${inter.variable} ${playfair.variable}`}
     >
       <body className="font-sans antialiased">
         <TopLoader />

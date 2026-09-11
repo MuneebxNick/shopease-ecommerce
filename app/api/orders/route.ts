@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
+import Product from '@/models/Product';
 import { verifyToken } from '@/lib/auth/jwt';
 
 function generateOrderNumber() {
@@ -29,6 +30,25 @@ export async function POST(request: Request) {
       quantity: item.quantity,
       image: item.image
     }));
+
+    // Check stock for all items
+    for (const item of mappedItems) {
+      const product = await Product.findById(item.productId);
+      if (!product) {
+        return NextResponse.json({ error: `Product not found: ${item.name}` }, { status: 400 });
+      }
+      if (product.stock < item.quantity) {
+        return NextResponse.json({ error: `Insufficient stock for ${item.name}` }, { status: 400 });
+      }
+    }
+
+    // Deduct stock
+    for (const item of mappedItems) {
+      await Product.updateOne(
+        { _id: item.productId, stock: { $gte: item.quantity } },
+        { $inc: { stock: -item.quantity } }
+      );
+    }
 
     // Calculate total on server
     const totalAmount = mappedItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);

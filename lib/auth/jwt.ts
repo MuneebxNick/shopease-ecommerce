@@ -4,6 +4,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
 
 export interface JwtPayload {
   userId: string;
+  name: string;
   email: string;
   role: string;
 }

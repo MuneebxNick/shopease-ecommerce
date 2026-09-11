@@ -4,8 +4,9 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { WishlistButton } from '@/components/products/wishlist-button'
 
-export function ProductGallery({ images, name }: { images: string[], name: string }) {
+export function ProductGallery({ images, name, productId }: { images: string[], name: string, productId: string }) {
   const [activeImage, setActiveImage] = useState(0)
 
   return (
@@ -38,7 +39,7 @@ export function ProductGallery({ images, name }: { images: string[], name: strin
         </div>
       )}
       
-      <div className="relative aspect-square w-full flex-1 overflow-hidden rounded-2xl bg-muted">
+      <div className="relative aspect-square w-full flex-1 overflow-hidden rounded-2xl bg-muted group">
         <Image 
           src={images[activeImage] || '/placeholder.svg'} 
           alt={name} 
@@ -47,6 +48,9 @@ export function ProductGallery({ images, name }: { images: string[], name: strin
           className="object-cover" 
           crossOrigin="anonymous"
         />
+        <div className="absolute right-4 top-4 z-10">
+          <WishlistButton productId={productId} className="h-10 w-10 sm:h-12 sm:w-12" iconClassName="size-5" />
+        </div>
       </div>
     </motion.div>
   )

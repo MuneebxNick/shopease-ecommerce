@@ -53,7 +53,7 @@ export default async function ProductDetailPage({
             
             {/* Left: Gallery */}
             <div>
-              <ProductGallery images={images} name={product.name} />
+              <ProductGallery images={images} name={product.name} productId={product.id} />
             </div>
 
             {/* Right: Details */}
