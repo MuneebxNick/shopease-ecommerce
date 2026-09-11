@@ -15,9 +15,19 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'ShopEase — Everyday goods, elevated.',
-  description: 'Premium curated products for modern lifestyles.',
-  generator: 'v0.app',
+  title: 'ShopEase | Modern Full-Stack Ecommerce',
+  description: 'A modern, high-performance ecommerce platform built with Next.js, featuring seamless checkout, user authentication, and a responsive design.',
+  generator: 'Next.js',
+  keywords: ['ecommerce', 'next.js', 'react', 'mongodb', 'zustand', 'typescript'],
+  authors: [{ name: 'Muneeb' }],
+  openGraph: {
+    title: 'ShopEase | Modern Full-Stack Ecommerce',
+    description: 'A modern, high-performance ecommerce platform built with Next.js.',
+    url: 'https://shopease-ecommerce-mocha.vercel.app/',
+    siteName: 'ShopEase',
+    locale: 'en_US',
+    type: 'website',
+  },
 }
 
 export const viewport: Viewport = {

@@ -1,6 +1,7 @@
 {
-  "name": "my-project",
-  "version": "0.1.0",
+  "name": "shopease",
+  "version": "1.0.0",
+  "description": "A modern full-stack ecommerce platform built with Next.js, MongoDB, JWT authentication and Zustand.",
   "private": true,
   "scripts": {
     "dev": "next dev",
